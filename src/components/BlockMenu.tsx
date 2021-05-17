@@ -1,6 +1,5 @@
 import * as React from "react";
 import capitalize from "lodash/capitalize";
-import { Portal } from "react-portal";
 import { EditorView } from "prosemirror-view";
 import { findParentNode } from "prosemirror-utils";
 import styled from "styled-components";
@@ -157,7 +156,7 @@ class BlockMenu extends React.Component<Props, State> {
     }
   };
 
-  insertItem = item => {
+  insertItem = (item) => {
     switch (item.name) {
       case "image":
         return this.triggerImagePick();
@@ -242,11 +241,11 @@ class BlockMenu extends React.Component<Props, State> {
     }
   };
 
-  triggerLinkInput = item => {
+  triggerLinkInput = (item) => {
     this.setState({ insertItem: item });
   };
 
-  handleImagePicked = event => {
+  handleImagePicked = (event) => {
     const files = getDataTransferFiles(event);
 
     const {
@@ -257,7 +256,7 @@ class BlockMenu extends React.Component<Props, State> {
       onShowToast,
     } = this.props;
     const { state, dispatch } = view;
-    const parent = findParentNode(node => !!node)(state.selection);
+    const parent = findParentNode((node) => !!node)(state.selection);
 
     if (parent) {
       dispatch(
@@ -286,7 +285,7 @@ class BlockMenu extends React.Component<Props, State> {
 
   clearSearch() {
     const { state, dispatch } = this.props.view;
-    const parent = findParentNode(node => !!node)(state.selection);
+    const parent = findParentNode((node) => !!node)(state.selection);
 
     if (parent) {
       dispatch(
@@ -409,7 +408,7 @@ class BlockMenu extends React.Component<Props, State> {
       items = items.concat(embedItems);
     }
 
-    const filtered = items.filter(item => {
+    const filtered = items.filter((item) => {
       if (item.name === "separator") return true;
 
       // If no image upload callback has been passed, filter the image block out
@@ -452,74 +451,67 @@ class BlockMenu extends React.Component<Props, State> {
     const { insertItem, ...positioning } = this.state;
 
     return (
-      <Portal>
-        <Wrapper
-          id="block-menu-container"
-          active={isActive}
-          ref={this.menuRef}
-          {...positioning}
-        >
-          {insertItem ? (
-            <LinkInputWrapper>
-              <LinkInput
-                type="text"
-                placeholder={
-                  insertItem.title
-                    ? dictionary.pasteLinkWithTitle(insertItem.title)
-                    : dictionary.pasteLink
-                }
-                onKeyDown={this.handleLinkInputKeydown}
-                onPaste={this.handleLinkInputPaste}
-                autoFocus
-              />
-            </LinkInputWrapper>
-          ) : (
-            <List>
-              {items.map((item, index) => {
-                if (item.name === "separator") {
-                  return (
-                    <ListItem key={index}>
-                      <hr />
-                    </ListItem>
-                  );
-                }
-                const selected = index === this.state.selectedIndex && isActive;
-
-                if (!item.title || !item.icon) {
-                  return null;
-                }
-
+      <Wrapper id="block-menu-container" ref={this.menuRef} {...positioning}>
+        {insertItem ? (
+          <LinkInputWrapper>
+            <LinkInput
+              type="text"
+              placeholder={
+                insertItem.title
+                  ? dictionary.pasteLinkWithTitle(insertItem.title)
+                  : dictionary.pasteLink
+              }
+              onKeyDown={this.handleLinkInputKeydown}
+              onPaste={this.handleLinkInputPaste}
+              autoFocus
+            />
+          </LinkInputWrapper>
+        ) : (
+          <List>
+            {items.map((item, index) => {
+              if (item.name === "separator") {
                 return (
                   <ListItem key={index}>
-                    <BlockMenuItem
-                      onClick={() => this.insertItem(item)}
-                      selected={selected}
-                      icon={item.icon}
-                      title={item.title}
-                      shortcut={item.shortcut}
-                    ></BlockMenuItem>
+                    <hr />
                   </ListItem>
                 );
-              })}
-              {items.length === 0 && (
-                <ListItem>
-                  <Empty>{dictionary.noResults}</Empty>
+              }
+              const selected = index === this.state.selectedIndex && isActive;
+
+              if (!item.title || !item.icon) {
+                return null;
+              }
+
+              return (
+                <ListItem key={index}>
+                  <BlockMenuItem
+                    onClick={() => this.insertItem(item)}
+                    selected={selected}
+                    icon={item.icon}
+                    title={item.title}
+                    shortcut={item.shortcut}
+                  ></BlockMenuItem>
                 </ListItem>
-              )}
-            </List>
-          )}
-          {uploadImage && (
-            <VisuallyHidden>
-              <input
-                type="file"
-                ref={this.inputRef}
-                onChange={this.handleImagePicked}
-                accept="image/*"
-              />
-            </VisuallyHidden>
-          )}
-        </Wrapper>
-      </Portal>
+              );
+            })}
+            {items.length === 0 && (
+              <ListItem>
+                <Empty>{dictionary.noResults}</Empty>
+              </ListItem>
+            )}
+          </List>
+        )}
+        {uploadImage && (
+          <VisuallyHidden>
+            <input
+              type="file"
+              ref={this.inputRef}
+              onChange={this.handleImagePicked}
+              accept="image/*"
+            />
+          </VisuallyHidden>
+        )}
+      </Wrapper>
     );
   }
 }
@@ -531,7 +523,7 @@ const LinkInputWrapper = styled.div`
 const LinkInput = styled(Input)`
   height: 36px;
   width: 100%;
-  color: ${props => props.theme.blockToolbarText};
+  color: ${(props) => props.theme.blockToolbarText};
 `;
 
 const List = styled.ol`
@@ -550,41 +542,31 @@ const ListItem = styled.li`
 const Empty = styled.div`
   display: flex;
   align-items: center;
-  color: ${props => props.theme.textSecondary};
+  color: ${(props) => props.theme.textSecondary};
   font-weight: 500;
   font-size: 14px;
   height: 36px;
   padding: 0 16px;
 `;
 
-export const Wrapper = styled.div<{
-  active: boolean;
-  top?: number;
-  bottom?: number;
-  left?: number;
-  isAbove: boolean;
-}>`
-  color: ${props => props.theme.text};
-  font-family: ${props => props.theme.fontFamily};
-  position: absolute;
-  z-index: ${props => {
+export const Wrapper = styled.div`
+  color: ${(props) => props.theme.text};
+  font-family: ${(props) => props.theme.fontFamily};
+  z-index: ${(props) => {
     return props.theme.zIndex + 100;
   }};
-  ${props => props.top !== undefined && `top: ${props.top}px`};
-  ${props => props.bottom !== undefined && `bottom: ${props.bottom}px`};
-  left: ${props => props.left}px;
-  background-color: ${props => props.theme.blockToolbarBackground};
+  background-color: ${(props) => props.theme.blockToolbarBackground};
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
     rgba(0, 0, 0, 0.08) 0px 4px 8px, rgba(0, 0, 0, 0.08) 0px 2px 4px;
-  opacity: 0;
+  opacity: 1;
   transform: scale(0.95);
   transition: opacity 150ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
     transform 150ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transition-delay: 150ms;
+  pointer-events: all;
   line-height: 0;
   box-sizing: border-box;
-  pointer-events: none;
   white-space: nowrap;
   width: 300px;
   max-height: 224px;
@@ -598,16 +580,8 @@ export const Wrapper = styled.div<{
   hr {
     border: 0;
     height: 0;
-    border-top: 1px solid ${props => props.theme.blockToolbarDivider};
+    border-top: 1px solid ${(props) => props.theme.blockToolbarDivider};
   }
-
-  ${({ active, isAbove }) =>
-    active &&
-    `
-    transform: translateY(${isAbove ? "6px" : "-6px"}) scale(1);
-    pointer-events: all;
-    opacity: 1;
-  `};
 
   @media print {
     display: none;

@@ -13,6 +13,7 @@ import BlockMenuItem from "./BlockMenuItem";
 import Input from "./Input";
 import VisuallyHidden from "./VisuallyHidden";
 import getDataTransferFiles from "../lib/getDataTransferFiles";
+import isMenuEnabled from "../lib/isMenuEnabled";
 import insertFiles from "../commands/insertFiles";
 import getMenuItems from "../menus/block";
 import baseDictionary from "../dictionary";
@@ -420,17 +421,10 @@ class BlockMenu extends React.Component<Props, State> {
       items = items.concat(embedItems);
     }
 
-    const toolbarItems =
-      toolbar && toolbar.toolbarItems ? toolbar.toolbarItems : null;
-
     const filteredMenuItems = items.filter((item) => {
       if (item.name === "separator") return true;
 
-      if (
-        toolbarItems?.findIndex(
-          (x) => x.toString().toLowerCase() === item.name?.toLowerCase()
-        ) === -1
-      ) {
+      if (!isMenuEnabled(toolbar, item)) {
         return false;
       }
 

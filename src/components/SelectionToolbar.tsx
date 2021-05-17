@@ -18,6 +18,7 @@ import isNodeActive from "../queries/isNodeActive";
 import getColumnIndex from "../queries/getColumnIndex";
 import getRowIndex from "../queries/getRowIndex";
 import createAndInsertLink from "../commands/createAndInsertLink";
+import isMenuEnabled from "../lib/isMenuEnabled";
 import { MenuItem, ToolbarItemsConfig } from "../types";
 import baseDictionary from "../dictionary";
 
@@ -122,20 +123,8 @@ export default class SelectionToolbar extends React.Component<Props> {
   };
 
   getFilteredItemsByConfig = (items) => {
-    const { toolbar } = this.props;
-    const toolbarItems =
-      toolbar && toolbar.toolbarItems && toolbar.toolbarItems.length > 0
-        ? toolbar.toolbarItems
-        : null;
-    if (!toolbarItems) return items;
-
     return items.filter((item) => {
-      return (
-        toolbarItems.findIndex(
-          (x) =>
-            x.toString().toLowerCase() === item.name.toString().toLowerCase()
-        ) > -1
-      );
+      return isMenuEnabled(this.props.toolbar, item);
     });
   };
 

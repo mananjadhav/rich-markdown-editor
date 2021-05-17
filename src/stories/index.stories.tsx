@@ -208,10 +208,17 @@ Dark.args = {
 There's a customizable dark theme too`,
 };
 
-export const BottomToolbar = Template.bind({});
-BottomToolbar.args = {
+export const ToolbarConfig = Template.bind({});
+ToolbarConfig.args = {
   toolbar: {
     toolbarPosition: "bottom",
+    toolbarItems: [
+      "bullet_list",
+      "ordered_list",
+      "blockquote",
+      "code_block",
+      "link",
+    ],
   },
   defaultValue: `# Welcome
 

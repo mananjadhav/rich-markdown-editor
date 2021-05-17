@@ -423,21 +423,22 @@ class BlockMenu extends React.Component<Props, State> {
     const toolbarItems =
       toolbar && toolbar.toolbarItems ? toolbar.toolbarItems : null;
 
-    const filtered = items.filter((item) => {
+    const filteredMenuItems = items.filter((item) => {
       if (item.name === "separator") return true;
+
+      if (
+        toolbarItems?.findIndex(
+          (x) => x.toString().toLowerCase() === item.name?.toLowerCase()
+        ) === -1
+      ) {
+        return false;
+      }
 
       // If no image upload callback has been passed, filter the image block out
       if (!uploadImage && item.name === "image") return false;
 
       // some items (defaultHidden) are not visible until a search query exists
       if (!search) return !item.defaultHidden;
-
-      if (
-        toolbarItems?.findIndex(
-          (x) => x.toString().toLowerCase() === item.name?.toLowerCase()
-        ) === -1
-      )
-        return false;
 
       const n = search.toLowerCase();
 
@@ -448,20 +449,20 @@ class BlockMenu extends React.Component<Props, State> {
     });
 
     // this block literally just trims unneccessary separators from the results
-    return filtered.reduce((acc, item, index) => {
+    return filteredMenuItems.reduce((acc, item, index) => {
       // trim separators from start / end
       if (item.name === "separator" && index === 0) return acc;
-      if (item.name === "separator" && index === filtered.length - 1)
+      if (item.name === "separator" && index === filteredMenuItems.length - 1)
         return acc;
 
       // trim double separators looking ahead / behind
-      const prev = filtered[index - 1];
+      const prev = filteredMenuItems[index - 1];
       if (prev && prev.name === "separator" && item.name === "separator")
         return acc;
 
-      const next = filtered[index + 1];
-      if (next && next.name === "separator" && item.name === "separator")
-        return acc;
+      // const next = filteredMenuItems[index + 1];
+      // if (next && next.name === "separator" && item.name === "separator")
+      //   return acc;
 
       // otherwise, continue
       return [...acc, item];

@@ -130,7 +130,6 @@ type Step = {
 
 const defaultToolbarConfig = {
   toolbarPosition: "top",
-  toolbarItems: ["heading", "notice"],
 };
 
 class RichMarkdownEditor extends React.PureComponent<Props, State> {

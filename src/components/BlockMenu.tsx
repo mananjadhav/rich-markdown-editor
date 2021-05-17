@@ -472,7 +472,7 @@ class BlockMenu extends React.Component<Props, State> {
               if (item.name === "separator") {
                 return (
                   <ListItem key={index}>
-                    <hr />
+                    <span className={"separator"} />
                   </ListItem>
                 );
               }
@@ -537,6 +537,7 @@ const List = styled.ol`
 const ListItem = styled.li`
   padding: 0;
   margin: 0;
+  display: inline-block;
 `;
 
 const Empty = styled.div`
@@ -568,19 +569,20 @@ export const Wrapper = styled.div`
   line-height: 0;
   box-sizing: border-box;
   white-space: nowrap;
-  width: 300px;
+  width: 100%;
   max-height: 224px;
   overflow: hidden;
-  overflow-y: auto;
+  overflow-x: auto;
 
   * {
     box-sizing: border-box;
   }
 
-  hr {
+  .separator {
     border: 0;
-    height: 0;
-    border-top: 1px solid ${(props) => props.theme.blockToolbarDivider};
+    height: 24px;
+    padding-top: 10px;
+    border-left: 1px solid ${(props) => props.theme.blockToolbarDivider};
   }
 
   @media print {

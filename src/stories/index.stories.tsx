@@ -19,7 +19,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<Props> = args => <Editor {...args} />;
+const Template: Story<Props> = (args) => <Editor {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -139,7 +139,7 @@ export const ReadOnly = Template.bind({});
 ReadOnly.args = {
   readOnly: true,
   defaultValue: `# Read Only
-  
+
 The content of this editor cannot be edited`,
 };
 
@@ -172,9 +172,9 @@ Persisted.args = {
   defaultValue:
     localStorage.getItem("saved") ||
     `# Persisted
-  
+
 The contents of this editor are persisted to local storage on change (edit and reload)`,
-  onChange: debounce(value => {
+  onChange: debounce((value) => {
     const text = value();
     localStorage.setItem("saved", text);
   }, 250),
@@ -196,7 +196,7 @@ export const Focused = Template.bind({});
 Focused.args = {
   autoFocus: true,
   defaultValue: `# Focused
-  
+
   This editor starts in focus`,
 };
 
@@ -206,4 +206,12 @@ Dark.args = {
   defaultValue: `# Dark
 
 There's a customizable dark theme too`,
+};
+
+export const BottomToolbar = Template.bind({});
+BottomToolbar.args = {
+  toolbarPosition: "bottom",
+  defaultValue: `# Welcome
+
+Just an easy to use **Markdown** editor with \`slash commands\``,
 };

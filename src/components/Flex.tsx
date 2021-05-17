@@ -17,7 +17,7 @@ type AlignValues =
 
 type Props = {
   style?: Record<string, string>;
-  column?: boolean;
+  direction?: string;
   align?: AlignValues;
   justify?: JustifyValues;
   auto?: boolean;
@@ -28,7 +28,7 @@ type Props = {
 const Flex = styled.div<Props>`
   display: flex;
   flex: ${({ auto }: Props) => (auto ? "1 1 auto" : "initial")};
-  flex-direction: ${({ column }: Props) => (column ? "column" : "row")};
+  flex-direction: ${({ direction }: Props) => direction};
   align-items: ${({ align }: Props) => align};
   justify-content: ${({ justify }: Props) => justify};
 `;

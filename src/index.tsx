@@ -681,6 +681,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
             {!readOnly && this.view && (
               <React.Fragment>
                 <SelectionToolbar
+                  toolbar={toolbarConfig}
                   view={this.view}
                   dictionary={dictionary}
                   commands={this.commands}

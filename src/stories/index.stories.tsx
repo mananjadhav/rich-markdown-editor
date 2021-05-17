@@ -213,6 +213,10 @@ ToolbarConfig.args = {
   toolbar: {
     toolbarPosition: "bottom",
     toolbarItems: [
+      "strong",
+      "em",
+      "code_inline",
+      "strikethrough",
       "bullet_list",
       "ordered_list",
       "blockquote",

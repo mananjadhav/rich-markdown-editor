@@ -18,7 +18,7 @@ import isNodeActive from "../queries/isNodeActive";
 import getColumnIndex from "../queries/getColumnIndex";
 import getRowIndex from "../queries/getRowIndex";
 import createAndInsertLink from "../commands/createAndInsertLink";
-import { MenuItem } from "../types";
+import { MenuItem, ToolbarItemsConfig } from "../types";
 import baseDictionary from "../dictionary";
 
 type Props = {
@@ -33,6 +33,7 @@ type Props = {
   onCreateLink?: (title: string) => Promise<string>;
   onShowToast?: (msg: string, code: string) => void;
   view: EditorView;
+  toolbar: ToolbarItemsConfig;
 };
 
 function isVisible(props) {
@@ -53,7 +54,7 @@ function isVisible(props) {
   const fragment = slice.content;
   const nodes = fragment.content;
 
-  return some(nodes, n => n.content.size);
+  return some(nodes, (n) => n.content.size);
 }
 
 export default class SelectionToolbar extends React.Component<Props> {
@@ -120,6 +121,24 @@ export default class SelectionToolbar extends React.Component<Props> {
     );
   };
 
+  getFilteredItemsByConfig = (items) => {
+    const { toolbar } = this.props;
+    const toolbarItems =
+      toolbar && toolbar.toolbarItems && toolbar.toolbarItems.length > 0
+        ? toolbar.toolbarItems
+        : null;
+    if (!toolbarItems) return items;
+
+    return items.filter((item) => {
+      return (
+        toolbarItems.findIndex(
+          (x) =>
+            x.toString().toLowerCase() === item.name.toString().toLowerCase()
+        ) > -1
+      );
+    });
+  };
+
   render() {
     const { dictionary, onCreateLink, isTemplate, ...rest } = this.props;
     const { view } = rest;
@@ -155,6 +174,8 @@ export default class SelectionToolbar extends React.Component<Props> {
     } else {
       items = getFormattingMenuItems(state, isTemplate, dictionary);
     }
+
+    items = this.getFilteredItemsByConfig(items);
 
     if (!items.length) {
       return null;

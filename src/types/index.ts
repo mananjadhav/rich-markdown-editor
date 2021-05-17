@@ -13,7 +13,12 @@ export interface ToolbarItemsConfig {
 type ToolbarPosition = "top" | "bottom";
 
 type ToolbarItems =
-  | "marks"
+  | "placeholder"
+  | "strong"
+  | "em"
+  | "strikethrough"
+  | "highlight"
+  | "code_inline"
   | "heading"
   | "bullet_list"
   | "ordered_list"

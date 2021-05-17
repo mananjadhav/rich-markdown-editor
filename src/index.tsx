@@ -330,11 +330,6 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
           onSaveAndExit: this.handleSaveAndExit,
           onCancel: this.props.onCancel,
         }),
-        new BlockMenuTrigger({
-          dictionary,
-          onOpen: this.handleOpenBlockMenu,
-          onClose: this.handleCloseBlockMenu,
-        }),
         new Placeholder({
           placeholder: this.props.placeholder,
         }),

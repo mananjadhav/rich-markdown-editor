@@ -210,7 +210,9 @@ There's a customizable dark theme too`,
 
 export const BottomToolbar = Template.bind({});
 BottomToolbar.args = {
-  toolbarPosition: "bottom",
+  toolbar: {
+    toolbarPosition: "bottom",
+  },
   defaultValue: `# Welcome
 
 Just an easy to use **Markdown** editor with \`slash commands\``,

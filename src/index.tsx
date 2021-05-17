@@ -114,10 +114,28 @@ export type Props = {
   tooltip: typeof React.Component | React.FC<any>;
   className?: string;
   style?: Record<string, string>;
-  toolbarPosition?: ToolbarPosition;
+  toolbar?: ToolbarItemsFilter;
 };
 
+interface ToolbarItemsFilter {
+  toolbarItems?: ToolbarItems[];
+  toolbarPosition?: ToolbarPosition;
+}
 type ToolbarPosition = "top" | "bottom";
+
+type ToolbarItems =
+  | "marks"
+  | "heading"
+  | "bullet-list"
+  | "numbered-list"
+  | "checkbox-list"
+  | "table"
+  | "blockquote"
+  | "code"
+  | "page-break"
+  | "image"
+  | "link"
+  | "notice";
 
 type State = {
   isEditorFocused: boolean;
@@ -129,6 +147,11 @@ type State = {
 
 type Step = {
   slice?: Slice;
+};
+
+const defaultToolbarConfig = {
+  toolbarPosition: "top",
+  toolbarItems: ["heading", "notice"],
 };
 
 class RichMarkdownEditor extends React.PureComponent<Props, State> {
@@ -147,7 +170,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     embeds: [],
     extensions: [],
     tooltip: Tooltip,
-    toolbarPosition: "top",
+    toolbar: defaultToolbarConfig,
   };
 
   state = {
@@ -652,11 +675,11 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
       tooltip,
       className,
       onKeyDown,
-      toolbarPosition,
+      toolbar,
     } = this.props;
-    const dictionary = this.dictionary(this.props.dictionary);
 
-    console.log("Toolbar Position", toolbarPosition);
+    const dictionary = this.dictionary(this.props.dictionary);
+    const toolbarConfig = Object.assign({}, defaultToolbarConfig, toolbar);
 
     return (
       <Flex
@@ -665,7 +688,9 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
         className={className}
         align="flex-start"
         justify="center"
-        direction={toolbarPosition === "top" ? "column" : "column-reverse"}
+        direction={
+          toolbarConfig.toolbarPosition === "bottom" ? "column-reverse" : "column"
+        }
       >
         <ThemeProvider theme={this.theme()}>
           <React.Fragment>

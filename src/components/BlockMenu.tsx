@@ -556,6 +556,7 @@ export const Wrapper = styled.div`
   z-index: ${(props) => {
     return props.theme.zIndex + 100;
   }};
+  margin: 10px 0;
   background-color: ${(props) => props.theme.blockToolbarBackground};
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,

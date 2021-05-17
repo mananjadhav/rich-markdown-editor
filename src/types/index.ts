@@ -6,6 +6,26 @@ export enum ToastType {
   Info = "info",
 }
 
+export interface ToolbarItemsConfig {
+  toolbarItems?: ToolbarItems[];
+  toolbarPosition?: ToolbarPosition;
+}
+type ToolbarPosition = "top" | "bottom";
+
+type ToolbarItems =
+  | "marks"
+  | "heading"
+  | "bullet_list"
+  | "ordered_list"
+  | "checkbox_list"
+  | "table"
+  | "blockquote"
+  | "code_block"
+  | "hr"
+  | "image"
+  | "link"
+  | "container_notice";
+
 export type MenuItem = {
   icon?: typeof React.Component | React.FC<any>;
   name?: string;

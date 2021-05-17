@@ -3,7 +3,12 @@ import capitalize from "lodash/capitalize";
 import { EditorView } from "prosemirror-view";
 import { findParentNode } from "prosemirror-utils";
 import styled from "styled-components";
-import { EmbedDescriptor, MenuItem, ToastType } from "../types";
+import {
+  EmbedDescriptor,
+  MenuItem,
+  ToastType,
+  ToolbarItemsConfig,
+} from "../types";
 import BlockMenuItem from "./BlockMenuItem";
 import Input from "./Input";
 import VisuallyHidden from "./VisuallyHidden";
@@ -34,6 +39,7 @@ type Props = {
   onLinkToolbarOpen: () => void;
   onClose: () => void;
   embeds: EmbedDescriptor[];
+  toolbar: ToolbarItemsConfig;
 };
 
 type State = {
@@ -388,7 +394,13 @@ class BlockMenu extends React.Component<Props, State> {
   }
 
   get filtered() {
-    const { dictionary, embeds, search = "", uploadImage } = this.props;
+    const {
+      dictionary,
+      embeds,
+      search = "",
+      uploadImage,
+      toolbar,
+    } = this.props;
     let items: (EmbedDescriptor | MenuItem)[] = getMenuItems(dictionary);
     const embedItems: EmbedDescriptor[] = [];
 
@@ -408,6 +420,9 @@ class BlockMenu extends React.Component<Props, State> {
       items = items.concat(embedItems);
     }
 
+    const toolbarItems =
+      toolbar && toolbar.toolbarItems ? toolbar.toolbarItems : null;
+
     const filtered = items.filter((item) => {
       if (item.name === "separator") return true;
 
@@ -417,7 +432,15 @@ class BlockMenu extends React.Component<Props, State> {
       // some items (defaultHidden) are not visible until a search query exists
       if (!search) return !item.defaultHidden;
 
+      if (
+        toolbarItems?.findIndex(
+          (x) => x.toString().toLowerCase() === item.name?.toLowerCase()
+        ) === -1
+      )
+        return false;
+
       const n = search.toLowerCase();
+
       return (
         (item.title || "").toLowerCase().includes(n) ||
         (item.keywords || "").toLowerCase().includes(n)

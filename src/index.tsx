@@ -16,7 +16,7 @@ import { light as lightTheme, dark as darkTheme } from "./theme";
 import baseDictionary from "./dictionary";
 import Flex from "./components/Flex";
 import { SearchResult } from "./components/LinkEditor";
-import { EmbedDescriptor, ToastType } from "./types";
+import { EmbedDescriptor, ToastType, ToolbarItemsConfig } from "./types";
 import SelectionToolbar from "./components/SelectionToolbar";
 import BlockMenu from "./components/BlockMenu";
 import LinkToolbar from "./components/LinkToolbar";
@@ -61,7 +61,6 @@ import TemplatePlaceholder from "./marks/Placeholder";
 import Underline from "./marks/Underline";
 
 // plugins
-import BlockMenuTrigger from "./plugins/BlockMenuTrigger";
 import History from "./plugins/History";
 import Keys from "./plugins/Keys";
 import MaxLength from "./plugins/MaxLength";
@@ -114,28 +113,8 @@ export type Props = {
   tooltip: typeof React.Component | React.FC<any>;
   className?: string;
   style?: Record<string, string>;
-  toolbar?: ToolbarItemsFilter;
+  toolbar?: ToolbarItemsConfig;
 };
-
-interface ToolbarItemsFilter {
-  toolbarItems?: ToolbarItems[];
-  toolbarPosition?: ToolbarPosition;
-}
-type ToolbarPosition = "top" | "bottom";
-
-type ToolbarItems =
-  | "marks"
-  | "heading"
-  | "bullet-list"
-  | "numbered-list"
-  | "checkbox-list"
-  | "table"
-  | "blockquote"
-  | "code"
-  | "page-break"
-  | "image"
-  | "link"
-  | "notice";
 
 type State = {
   isEditorFocused: boolean;
@@ -648,25 +627,6 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     }
   );
 
-  renderToolbar = (dictionary) => {
-    return (
-      <BlockMenu
-        view={this.view}
-        commands={this.commands}
-        dictionary={dictionary}
-        isActive={this.state.blockMenuOpen}
-        search={this.state.blockMenuSearch}
-        onClose={this.handleCloseBlockMenu}
-        uploadImage={this.props.uploadImage}
-        onLinkToolbarOpen={this.handleOpenLinkMenu}
-        onImageUploadStart={this.props.onImageUploadStart}
-        onImageUploadStop={this.props.onImageUploadStop}
-        onShowToast={this.props.onShowToast}
-        embeds={this.props.embeds}
-      />
-    );
-  };
-
   render = () => {
     const {
       readOnly,
@@ -689,12 +649,30 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
         align="flex-start"
         justify="center"
         direction={
-          toolbarConfig.toolbarPosition === "bottom" ? "column-reverse" : "column"
+          toolbarConfig.toolbarPosition === "bottom"
+            ? "column-reverse"
+            : "column"
         }
       >
         <ThemeProvider theme={this.theme()}>
           <React.Fragment>
-            {!readOnly && this.view && this.renderToolbar(dictionary)}
+            {!readOnly && this.view && (
+              <BlockMenu
+                toolbar={toolbarConfig}
+                view={this.view}
+                commands={this.commands}
+                dictionary={dictionary}
+                isActive={this.state.blockMenuOpen}
+                search={this.state.blockMenuSearch}
+                onClose={this.handleCloseBlockMenu}
+                uploadImage={this.props.uploadImage}
+                onLinkToolbarOpen={this.handleOpenLinkMenu}
+                onImageUploadStart={this.props.onImageUploadStart}
+                onImageUploadStop={this.props.onImageUploadStop}
+                onShowToast={this.props.onShowToast}
+                embeds={this.props.embeds}
+              />
+            )}
             <StyledEditor
               readOnly={readOnly}
               readOnlyWriteCheckboxes={readOnlyWriteCheckboxes}

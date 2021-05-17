@@ -25,6 +25,7 @@ import Extension from "./lib/Extension";
 import ExtensionManager from "./lib/ExtensionManager";
 import ComponentView from "./lib/ComponentView";
 import headingToSlug from "./lib/headingToSlug";
+import isMenuEnabled from "./lib/isMenuEnabled";
 
 // nodes
 import ReactNode from "./nodes/ReactNode";
@@ -693,17 +694,19 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
                   onCreateLink={this.props.onCreateLink}
                   tooltip={tooltip}
                 />
-                <LinkToolbar
-                  view={this.view}
-                  dictionary={dictionary}
-                  isActive={this.state.linkMenuOpen}
-                  onCreateLink={this.props.onCreateLink}
-                  onSearchLink={this.props.onSearchLink}
-                  onClickLink={this.props.onClickLink}
-                  onShowToast={this.props.onShowToast}
-                  onClose={this.handleCloseLinkMenu}
-                  tooltip={tooltip}
-                />
+                {isMenuEnabled(toolbarConfig, "link") && (
+                  <LinkToolbar
+                    view={this.view}
+                    dictionary={dictionary}
+                    isActive={this.state.linkMenuOpen}
+                    onCreateLink={this.props.onCreateLink}
+                    onSearchLink={this.props.onSearchLink}
+                    onClickLink={this.props.onClickLink}
+                    onShowToast={this.props.onShowToast}
+                    onClose={this.handleCloseLinkMenu}
+                    tooltip={tooltip}
+                  />
+                )}
               </React.Fragment>
             )}
           </React.Fragment>

@@ -2,7 +2,7 @@ import { ToolbarItemsConfig, EmbedDescriptor, MenuItem } from "./../types";
 
 export default function isMenuEnabled(
   toolbar: ToolbarItemsConfig,
-  menu: EmbedDescriptor | MenuItem
+  menu: EmbedDescriptor | MenuItem | string
 ) {
   if (!menu) {
     return false;
@@ -15,9 +15,14 @@ export default function isMenuEnabled(
   }
 
   const isEnabled =
-    toolbarItems?.findIndex(
-      (x) => x.toString().toLowerCase() === menu.name?.toLowerCase()
-    ) > -1;
+    toolbarItems?.findIndex((x) => {
+      const toolbarItemName = x.toString().toLowerCase();
+      if (typeof menu === "string") {
+        return toolbarItemName === menu.toLowerCase();
+      } else {
+        return toolbarItemName === menu.name?.toLowerCase();
+      }
+    }) > -1;
 
   return isEnabled;
 }
